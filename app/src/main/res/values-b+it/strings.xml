@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_running">MoveCare in esecuzione</string>
+    <string name="hello">Ciao </string>
+    <string name="recharge_message">Ricarica il telefono</string>
+
+    <!-- ** PERMISSION REQUEST STRINGS ** -->
+    <string name="permission_title">MoveCare ha bisogno del tuo permesso</string>
+    <string name="permission_request">Questo consente all\'app di funzionare correttamente ed
+        accedere a posizione, contapassi, accelerometro, numero di telefono, registro chiamate e
+        messaggi, creare ed inviare report utente, inviare notifiche e funzionare in background.</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Esci</string>
+
+    <!-- ** PERMISSION ERROR STRINGS ** -->
+    <string name="permissionError_title">Impossibile procedere</string>
+    <string name="permissionError_request">Siamo spiacenti, per continuare MoveCare necessita dei
+        tuoi permessi</string>
+
+    <!-- ** INITIALIZATION STRINGS ** -->
+    <string name="init_title">Inizializzazione di MoveCare in corso</string>
+    <string name="init_request">Attendi per favore..</string>
+
+    <!-- ** LOGIN ERROR STRINGS ** -->
+    <string name="loginError_title">Errore Login</string>
+    <string name="loginError_request">Siamo spiacenti, MoveCare non è abilitato per funzionare con
+        questo numero di telefono.</string>
+
+    <!-- ** NOTIFICATION: REPORT ** -->
+    <string name="reportTitle">Report Giornaliero</string>
+    <string name="reportErrorTitle">Errore: impossibile creare il report</string>
+
+    <string name="noInternetMessage">Internet non disponibile, accendi il wifi</string>
+    <string name="sendReportError">Server non disponibile</string>
+
+    <!-- ** NOTIFICATION: CHECK BATTERY ** -->
+    <string name="batteryLowTitle">Movecare ha smesso di funzionare</string>
+    <string name="batteryThresholdTitle">Batteria sotto al 40%</string>
+    <string name="batteryOkTitle">Movecare ha ripreso a funzionare</string>
+    <string name="batteryHighTitle">Controllo batteria</string>
+
+    <string name="batteryLowMessage">Batteria bassa</string>
+    <string name="batteryThresholdMessage">Ricarica il telefono</string>
+    <string name="batteryOkMessage">Batteria okay</string>
+
+</resources>

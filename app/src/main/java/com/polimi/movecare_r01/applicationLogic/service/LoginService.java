@@ -44,22 +44,12 @@ public class LoginService extends IntentService {
                 TENANT
         };
 
-        try {
-            httpLoginManager.login(params);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        httpLoginManager.login(params);
 
-        sendMessage();
+        //sendMessage();
         // Check internet connection:
         // https://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
     }
 
-    private void sendMessage() {
-        Log.e("sender", "Broadcasting message");
-        Intent intent = new Intent("custom-event-name");
 
-        intent.putExtra("message", "This is my message!");
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
 }

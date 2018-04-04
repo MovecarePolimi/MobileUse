@@ -19,7 +19,6 @@ import java.util.List;
 public class InitializationService extends IntentService {
     private static final String TAG = InitializationService.class.getSimpleName();
 
-    private static final String SIM_SERIAL_NUMBER = "simSerialNumber";
     private static final String FIRST_ATTEMPT = "firstAttempt";
 
     public InitializationService() {
@@ -31,16 +30,13 @@ public class InitializationService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "Start service");
 
-        //String simSerialNumber = intent.getStringExtra(SIM_SERIAL_NUMBER);
+
+        // **** 1 **** -  Set alarms: report and battery checking (11.00 - 16.00)
+        setSharedPreferences();
 
         // **** 2 **** -  Set alarms: report and battery checking (11.00 - 16.00)
-        //setSharedPreferences();
+        setAlarms();
 
-        // **** 2 **** -  Set alarms: report and battery checking (11.00 - 16.00)
-        //setAlarms();
-
-        // **** 3 **** -  Store user data into key-value file (sharedpreferences)
-        //storeUserData(simSerialNumber);
 
         // **** REPORT - Non deve essere chiamato qui ma triggerato dal ReportAlarmReceiver
         //startService(new Intent(this, ReadLogsService.class));
@@ -58,22 +54,5 @@ public class InitializationService extends IntentService {
         sharedPreferencesMng.initializeSettings(this);
     }
 
-    /*private void storeUserData(String simSerialNumber){
-        Intent userDataIntent = new Intent(this, StoreUserDataService.class);
-        User u = new User();
-        u.setName("Pasquale");
-        u.setSurname("Franchino");
-        u.setPhoneNumber(simSerialNumber);
-        userDataIntent.putExtra("utente", u);
-        startService(userDataIntent);
-    }*/
-
-    /*private User userLogin(){
-        Intent loginIntent = new Intent(this, LoginService.class);
-        loginIntent.setData(Uri.parse(simSerialNumber));
-        startService(loginIntent);
-
-        return new User();
-    }*/
 
 }

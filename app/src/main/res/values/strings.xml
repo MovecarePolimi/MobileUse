@@ -1,11 +1,12 @@
 <resources>
+    <string name="app_name">MoveCare</string>
+
+    <!-- ** LOGIN ACTIVITY ** -->
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
 
-    <!--<string name="movecare_image">movecare image</string>-->
-
-    <string name="app_name">MoveCare</string>
+    <!-- ** MAIN ACTIVITY ** -->
     <string name="app_running">MoveCare is running</string>
     <string name="hello">Hello </string>
     <string name="recharge_message">Recharge your device</string>
@@ -22,14 +23,11 @@
     <string name="permissionError_title">Permission Error</string>
     <string name="permissionError_request">Sorry, MoveCare needs your permission to continue.</string>
 
-    <!-- ** INITIALIZATION STRINGS ** -->
-    <string name="init_title">MoveCare initialization</string>
-    <string name="init_request">Please wait..</string>
 
     <!-- ** LOGIN ERROR STRINGS ** -->
-    <string name="loginError_title">Login Error</string>
-    <string name="loginError_request">Sorry, MoveCare is not enabled to work with this phone number.</string>
-
+    <string name="loginError_title">Login Failed</string>
+    <string name="loginError_request">User credentials not valid</string>
+    <string name="loginError_noInternet">Please check your internet connection and try again</string>
 
     <!-- ** NOTIFICATION: REPORT ** -->
     <string name="reportTitle">Daily Report</string>

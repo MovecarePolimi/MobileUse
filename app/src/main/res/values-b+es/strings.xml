@@ -17,14 +17,10 @@
     <string name="permissionError_request">Lo sentimos, para continuar MoveCare requiere sus
         permisos</string>
 
-    <!-- ** INITIALIZATION STRINGS ** -->
-    <string name="init_title">Inicializando MoveCare</string>
-    <string name="init_request">Por favor espera..</string>
 
     <!-- ** LOGIN ERROR STRINGS ** -->
     <string name="loginError_title">Error de login</string>
-    <string name="loginError_request">Lo sentimos, MoveCare no está habilitado para trabajar
-        con este número de teléfono.</string>
+    <string name="loginError_request">Credensialis utentes non funzionanos </string>
 
 
 

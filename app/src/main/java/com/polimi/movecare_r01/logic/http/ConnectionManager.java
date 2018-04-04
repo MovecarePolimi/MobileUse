@@ -24,7 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
-public class ConnectionManager{
+public class ConnectionManager extends HttpAbstract{
 
     private static final String TAG = ConnectionManager.class.getSimpleName();
 
@@ -60,34 +60,6 @@ public class ConnectionManager{
         this.observer = new JsonSentObserver(context, "123456789", subject);
     }
 
-    /*public void sendJSON(String msgJSON,
-                         String callJSON,
-                         String smartphoneUseJSON,
-                         String peopleUseJSON)
-            throws IOException, InternetConnectionException {
-
-        if(!isConnected()){
-
-            throw  new InternetConnectionException();
-        }
-
-        if(getConnectionType() != 1){
-            Log.w(TAG, "Warning: No Wi-Fi connection");
-        }
-
-
-        sendMessageJSON(msgJSON);
-        sendCallJSON(callJSON);
-        sendSmartphoneUseJSON(smartphoneUseJSON);
-        sendPeopleUseJSON(peopleUseJSON);
-    }*/
-
-    /*public void provaOk(String timeMillis){
-        subject.setState(true, timeMillis);
-        subject.setState(true, timeMillis);
-        subject.setState(true, timeMillis);
-        subject.setState(true, timeMillis);
-    }*/
 
     public void sendJSON(String msgJSON,
                               String callJSON,
@@ -96,12 +68,12 @@ public class ConnectionManager{
                               String timeMillis)
             throws IOException, InternetConnectionException {
 
-        if(!isConnected()){
+        if(!isConnected(context)){
 
             throw  new InternetConnectionException();
         }
 
-        if(getConnectionType() != 1){
+        if(getConnectionType(context) != ConnectionType.WIFI){
             Log.w(TAG, "Warning: No Wi-Fi connection");
         }
 
@@ -322,28 +294,6 @@ public class ConnectionManager{
         }
     }
 
-    private boolean isConnected(){
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
-
-    // return 1 if Wi-Fi, 2 if mobile data, otherwise 0
-    private int getConnectionType(){
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isWiFi = isConnected() && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-        if(isWiFi){
-            return 1;
-        }
-        boolean isMobileData = isConnected() && activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
-        if(isMobileData){
-            return 2;
-        }
-        return 0;
-    }
 
     private boolean checkServerResponse(InputStream stream) throws IOException {
 
@@ -371,22 +321,4 @@ public class ConnectionManager{
         }
     }
 
-
-    private void enableMobileData(Context context, boolean enabled) throws Exception{
-        final ConnectivityManager conman = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        Class conmanClass = null;
-        try {
-            conmanClass = Class.forName(conman.getClass().getName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        final Field iConnectivityManagerField = conmanClass.getDeclaredField("mService");
-        iConnectivityManagerField.setAccessible(true);
-        final Object iConnectivityManager = iConnectivityManagerField.get(conman);
-        final Class iConnectivityManagerClass = Class.forName(iConnectivityManager.getClass().getName());
-        final Method setMobileDataEnabledMethod = iConnectivityManagerClass.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
-        setMobileDataEnabledMethod.setAccessible(true);
-        setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
-    }
 }

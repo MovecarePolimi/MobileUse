@@ -11,8 +11,7 @@ import android.support.v7.app.AlertDialog;
 import com.polimi.movecare_r01.R;
 import com.polimi.movecare_r01.ui.interfaces.LoginDialogListener;
 
-
-public class LoginErrorFragment extends DialogFragment {
+public class LoginNoInternetFragment extends DialogFragment {
 
     LoginDialogListener mListener;
 
@@ -40,10 +39,10 @@ public class LoginErrorFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(R.string.loginError_title)
-                .setMessage(R.string.loginError_request)
+                .setMessage(R.string.loginError_noInternet)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogPositiveClick(LoginErrorFragment.this);
+                        mListener.onDialogPositiveClick(LoginNoInternetFragment.this);
                     }
                 });
         // Create the AlertDialog object and return it

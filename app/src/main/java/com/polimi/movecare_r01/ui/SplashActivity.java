@@ -14,70 +14,78 @@ public class SplashActivity extends AppCompatActivity {
     private final static String TAG = "SplashActivity";
     private Context context;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
         this.context = getApplicationContext();
 
+        /* If we need to implement Splash Screen with a sleeping thread: not suggested
+
+        setContentView(R.layout.activity_splash);
+        this.context = getApplicationContext();
         Thread welcomeThread = new Thread() {
             @Override
             public void run() {
-                try {
-                    super.run();
-                    sleep(3000);  //Delay of 3 seconds
-
-                    LoginPreferences log = new LoginPreferences();
-                    String token = log.getVariable(context, LoginPreferences.Variable.ACCESS_TOKEN);
-                    String username = log.getVariable(context, LoginPreferences.Variable.USERNAME);
-                    String uuid = log.getVariable(context, LoginPreferences.Variable.UUID);
-                    //String email = log.getVariable(context, LoginPreferences.Variable.EMAIL);
-
-                    if(!isValidString(token)){
-                        Log.e(TAG, "Login is required");
-
-                        startActivity(new Intent(context, LoginActivity.class));
-                        finish();
-                    } else{
-                        // controllare cosa succede se un utente non ha email
-                        if(!checkTokenValidity(token) || !checkDataValidity(username, uuid)){
-                            Log.e(TAG, "Token is not syntactically valid, refresh");
-                            // refresh token, then store new token and user data
-                            refreshToken();
-                        }
-
-                        // at this point, every data is valid
-
-                        startActivity(new Intent(context, MainActivity.class));
-                        finish();
-                    }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception thrown");
-                    e.printStackTrace();
-                    finish();
-                }
+                initialize();
             }
         };
         welcomeThread.start();
+
+        */
+
+        initialize();
+
     }
 
+    private void initialize(){
+        try {
+            LoginPreferences log = new LoginPreferences();
+            String access_token = log.getVariable(context, LoginPreferences.Variable.ACCESS_TOKEN);
+            String refresh_token = log.getVariable(context, LoginPreferences.Variable.REFRESH_TOKEN);
+            String username = log.getVariable(context, LoginPreferences.Variable.USERNAME);
+            String uuid = log.getVariable(context, LoginPreferences.Variable.UUID);
+            String email = log.getVariable(context, LoginPreferences.Variable.EMAIL);
 
-    // Check any token pattern here: number of chars, expiration date, etc
+            if(!isValidString(access_token)){
+                Log.e(TAG, "Login is required");
+
+                startActivity(new Intent(context, LoginActivity.class));
+                finish();
+            } else{
+                if(!checkTokenValidity(access_token) || !checkDataValidity(username, uuid, email)){
+                    Log.e(TAG, "Token is not syntactically valid, refresh");
+                    // refresh token, then store new token and user data
+                    refreshToken();
+                }
+
+                // at this point, every data is valid
+                startActivity(new Intent(context, MainActivity.class));
+                finish();
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Exception thrown");
+            e.printStackTrace();
+            finish();
+        }
+    }
+
     private boolean checkTokenValidity(String token){
-        // check expiration date??
+        // Check any token pattern here: number of chars, expiration date, etc
         return true;
     }
 
     // Email not checked since a user may not have an email address
-    private boolean checkDataValidity(String username, String uuid){
-        return !(username == null || uuid == null ||
-                username.isEmpty() || uuid.isEmpty());
+    private boolean checkDataValidity(String username, String uuid, String email){
+        return !(username == null || uuid == null || email == null ||
+                username.isEmpty() || uuid.isEmpty() || email.isEmpty());
     }
 
     private boolean isValidString(String val){
         return !(val == null || val.isEmpty());
     }
+
     private void refreshToken(){
 
     }

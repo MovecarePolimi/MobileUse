@@ -16,14 +16,9 @@
     <string name="permissionError_request">Siamo spiacenti, per continuare MoveCare necessita dei
         tuoi permessi</string>
 
-    <!-- ** INITIALIZATION STRINGS ** -->
-    <string name="init_title">Inizializzazione di MoveCare in corso</string>
-    <string name="init_request">Attendi per favore..</string>
-
     <!-- ** LOGIN ERROR STRINGS ** -->
     <string name="loginError_title">Errore Login</string>
-    <string name="loginError_request">Siamo spiacenti, MoveCare non è abilitato per funzionare con
-        questo numero di telefono.</string>
+    <string name="loginError_request">Credenziali errate </string>
 
     <!-- ** NOTIFICATION: REPORT ** -->
     <string name="reportTitle">Report Giornaliero</string>

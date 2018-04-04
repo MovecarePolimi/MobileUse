@@ -5,21 +5,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import android.content.Intent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.polimi.movecare_r01.R;
 import com.polimi.movecare_r01.applicationLogic.service.LoginService;
+import com.polimi.movecare_r01.logic.http.HttpLoginManager;
+import com.polimi.movecare_r01.ui.fragment.LoginErrorFragment;
+import com.polimi.movecare_r01.ui.fragment.LoginNoInternetFragment;
+import com.polimi.movecare_r01.ui.interfaces.LoginDialogListener;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginDialogListener{
     private static final String TAG = "LoginActivity";
 
     private static final String BROADCAST_LOGIN_EVENT = "";
@@ -32,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     // Variables for testing
-    private static final String username = "user101";
-    private static final String password = "123456";
     private static final String grant_type = "password";
     private static final String application = "4bac09a5b8dd11e781af0242ac120002";
     private static final String tenant = "5a258444b8dd11e781af0242ac120002";
@@ -52,41 +55,25 @@ public class LoginActivity extends AppCompatActivity {
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
     }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            String message = intent.getStringExtra("message");
-            Log.e("receiver", "Got message: " + message);
-
-            // Check message received by LoginService, change UI
-        }
-    };
-
-    public void login() {
+    public void loginClicked(View view) {
         Log.d(TAG, "Login");
 
-        /*if (!validate()) {
-            onLoginFailed();
+        /*String email = usernameText.getText().toString();
+        String password = passwordText.getText().toString();*/
+
+        String username = "user101";
+        String password = "123456";
+
+        /*if (!validate(email, password)) {
+            showLoginErrorDialog();
             return;
         }*/
 
-        // check internet is available here
+        forceCloseKeyboard();
 
-
-        // ok, input is valid and internet is available
         loginButton.setEnabled(false);
-
         progressDialog.show();
 
         Intent loginIntent = new Intent(this, LoginService.class);
@@ -99,21 +86,36 @@ public class LoginActivity extends AppCompatActivity {
 
         startService(loginIntent);
 
-        /*String email = usernameText.getText().toString();
-        String password = passwordText.getText().toString();*/
 
-        // TODO: Implement your own authentication logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                       Log.e("Progress Dialog Thread", "Dismissing");
-                        progressDialog.dismiss();
-                        startActivity(new Intent(context, MainActivity.class));
-                        finish();
-                    }
-                }, 3000);
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            HttpLoginManager.MessageType m = (HttpLoginManager.MessageType)intent.getSerializableExtra("message");
+            Log.e("receiver", "Got message: " + m);
+
+            if(m == HttpLoginManager.MessageType.MGS_NO_INTERNET){
+                Log.e(TAG,"Login ERROR: no internet");
+                showLoginNoInternetDialog();
+            } else if(m == HttpLoginManager.MessageType.MSG_ERR){
+                Log.e(TAG,"Login ERROR: credential error");
+                showLoginErrorDialog();
+
+            } else if(m == HttpLoginManager.MessageType.MSG_OK){
+                Log.e(TAG,"Login OK");
+
+                startActivity(new Intent(context, MainActivity.class));
+                finish();
+            } else{
+                Log.e(TAG, "Unexpeced behaviour: received unknown value "+m);
+            }
+
+            progressDialog.dismiss();
+        }
+    };
+
 
     @Override
     protected void onResume(){
@@ -137,18 +139,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void onLoginSuccess() {
-        loginButton.setEnabled(true);
-        finish();
+    private void setLoginButtonState(boolean enable) {
+        loginButton.setEnabled(enable);
     }
 
-    private void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
 
-        loginButton.setEnabled(true);
-    }
-
-    private boolean validate() {
+    private boolean validate(String username, String password) {
         boolean valid = true;
 
         if (username.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
@@ -166,5 +162,33 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private void forceCloseKeyboard(){
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            if(imm != null){
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+    }
+
+    private void showLoginErrorDialog(){
+        DialogFragment loginErrorFragment = new LoginErrorFragment();
+        loginErrorFragment.setCancelable(false);
+        loginErrorFragment.show(getSupportFragmentManager(), "permission");
+    }
+
+    private void showLoginNoInternetDialog(){
+        DialogFragment loginNoInternetFragment = new LoginNoInternetFragment();
+        loginNoInternetFragment.setCancelable(false);
+        loginNoInternetFragment.show(getSupportFragmentManager(), "permission");
+    }
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.e(TAG, "Dialog Positive Click");
+        loginButton.setEnabled(true);
     }
 }

@@ -1,6 +1,7 @@
 package com.polimi.movecare_r01.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.polimi.movecare_r01.R;
 import com.polimi.movecare_r01.applicationLogic.service.InitializationService;
+import com.polimi.movecare_r01.dao.preferences.LoginPreferences;
 import com.polimi.movecare_r01.logic.battery.BatteryChecker;
 import com.polimi.movecare_r01.ui.fragment.PermissionErrorFragment;
 import com.polimi.movecare_r01.ui.fragment.PermissionFragment;
@@ -29,6 +31,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements PermissionDialogListener {
 
     private static final String SIM_SERIAL_NUMBER = "simSerialNumber";
+
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 12345;
     private static final String[] permissionsArray = {
             /* Permission Group "Phone", which includes READ_CALL_LOG, CALL_PHONE*/
@@ -48,17 +51,18 @@ public class MainActivity extends AppCompatActivity implements PermissionDialogL
             Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     };
 
-    private String simSerialNumber;
-    //private DialogFragment initFragment;
     private DialogFragment permissionFragment;
     private DialogFragment permissionErrorFragment;
-
+    private Context context;
     private static MainActivity ins;
+
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.context = getApplicationContext();
         ins = this;
 
         boolean permissionRequestNeeded = false;
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements PermissionDialogL
             permissionFragment.setCancelable(false);
             permissionFragment.show(getSupportFragmentManager(), "permission");
         } else {
-            startLoginActivity();
+            startInitService();
         }
     }
 
@@ -141,46 +145,17 @@ public class MainActivity extends AppCompatActivity implements PermissionDialogL
                     }
                 }, 0);
             } else {
-                startLoginActivity();
+                startInitService();
             }
 
         }
-    }
-
-    private void startLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 
     private void startInitService() {
-        setSimSerialNumber();
         setAppRunningStrings();
 
-        Intent initIntent = new Intent(this, InitializationService.class);
-        initIntent.putExtra(SIM_SERIAL_NUMBER, simSerialNumber);
-        startService(initIntent);
+        startService(new Intent(this, InitializationService.class));
 
-    }
-
-    private void setSimSerialNumber() {
-        if (simSerialNumber == null) {
-            TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            simSerialNumber = tMgr.getSimSerialNumber();
-
-            if(simSerialNumber == null){
-                Log.e(this.getClass().getSimpleName(), "PHONE NUMBER STILL NULL");
-            }
-        }
     }
 
     private void setAppRunningStrings(){
@@ -188,7 +163,10 @@ public class MainActivity extends AppCompatActivity implements PermissionDialogL
         TextView userTV = (TextView) findViewById(R.id.userTV);
         TextView movecareTV = (TextView) findViewById(R.id.movecareTV);
 
-        userTV.setText(getText(R.string.hello)+" "+simSerialNumber);
+        LoginPreferences logPrefs = new LoginPreferences();
+        username = logPrefs.getVariable(context, LoginPreferences.Variable.USERNAME);
+
+        userTV.setText(getText(R.string.hello)+" "+username);
 
         BatteryChecker batteryChecker;
         try {
@@ -233,20 +211,4 @@ public class MainActivity extends AppCompatActivity implements PermissionDialogL
         });
     }
 
-    /*
-    // contains code for reading (sharedpreferences) user data
-    private void retrieveUserData(){
-        // Intent retrieveIntent = new Intent(this, RetrieveUserDataService.class);
-        // startService(retrieveIntent);
-    }
-
-    private void showWaitingDialog(){
-        initFragment = new InitializationFragment();
-        initFragment.setCancelable(false);
-        initFragment.show(getSupportFragmentManager(), "init");
-    }
-
-    private void dismissWaitingDialog(){
-        initFragment.dismiss();
-    }*/
 }

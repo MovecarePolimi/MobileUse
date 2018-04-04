@@ -24,8 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username"
-                android:inputType="text"
-            />
+                android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
         <!--  Password Label -->
@@ -46,10 +45,11 @@
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
+            android:onClick="loginClicked"
             android:padding="12dp"
-            android:text="@string/login"/>
+            android:text="@string/login" />
 
     </LinearLayout>
 </ScrollView>

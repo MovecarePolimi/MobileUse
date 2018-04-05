@@ -18,7 +18,7 @@
 
     <!-- ** LOGIN ERROR STRINGS ** -->
     <string name="loginError_title">Errore Login</string>
-    <string name="loginError_request">Credenziali errate </string>
+    <string name="loginError_wrongCredentials">Credenziali errate </string>
 
     <!-- ** NOTIFICATION: REPORT ** -->
     <string name="reportTitle">Report Giornaliero</string>

@@ -26,8 +26,10 @@
 
     <!-- ** LOGIN ERROR STRINGS ** -->
     <string name="loginError_title">Login Failed</string>
-    <string name="loginError_request">User credentials not valid</string>
-    <string name="loginError_noInternet">Please check your internet connection and try again</string>
+    <string name="loginError_wrongCredentials">User credentials not valid.</string>
+    <string name="loginError_noInternet">Please check your internet connection and try again.</string>
+    <string name="loginError_newLoginRequired">Sorry, an error occurs. Please try again.</string>
+    <string name="loginError_fatalError">Sorry, a fatal error occurs. Please contact MoveCare.</string>
 
     <!-- ** NOTIFICATION: REPORT ** -->
     <string name="reportTitle">Daily Report</string>

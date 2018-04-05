@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.polimi.movecare_r01.R;
 import com.polimi.movecare_r01.dao.preferences.LoginPreferences;
 
 public class SplashActivity extends AppCompatActivity {
@@ -47,22 +46,19 @@ public class SplashActivity extends AppCompatActivity {
             String uuid = log.getVariable(context, LoginPreferences.Variable.UUID);
             String email = log.getVariable(context, LoginPreferences.Variable.EMAIL);
 
-            if(!isValidString(access_token)){
+            // If stored tokens or user data are not valid (null or empty), then do login again
+            if(!isValidString(access_token) || !isValidString(refresh_token) ||
+                    !isValidString(username) || !isValidString(uuid) || !isValidString(email)){
                 Log.e(TAG, "Login is required");
 
                 startActivity(new Intent(context, LoginActivity.class));
                 finish();
-            } else{
-                if(!checkTokenValidity(access_token) || !checkDataValidity(username, uuid, email)){
-                    Log.e(TAG, "Token is not syntactically valid, refresh");
-                    // refresh token, then store new token and user data
-                    refreshToken();
-                }
-
-                // at this point, every data is valid
-                startActivity(new Intent(context, MainActivity.class));
-                finish();
+                return;
             }
+
+            // stored data are reliable
+            startActivity(new Intent(context, MainActivity.class));
+            finish();
 
         } catch (Exception e) {
             Log.e(TAG, "Exception thrown");
@@ -71,22 +67,9 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private boolean checkTokenValidity(String token){
-        // Check any token pattern here: number of chars, expiration date, etc
-        return true;
-    }
 
-    // Email not checked since a user may not have an email address
-    private boolean checkDataValidity(String username, String uuid, String email){
-        return !(username == null || uuid == null || email == null ||
-                username.isEmpty() || uuid.isEmpty() || email.isEmpty());
-    }
 
     private boolean isValidString(String val){
         return !(val == null || val.isEmpty());
-    }
-
-    private void refreshToken(){
-
     }
 }

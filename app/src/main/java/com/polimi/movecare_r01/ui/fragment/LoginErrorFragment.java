@@ -11,10 +11,9 @@ import android.support.v7.app.AlertDialog;
 import com.polimi.movecare_r01.R;
 import com.polimi.movecare_r01.ui.interfaces.LoginDialogListener;
 
-
 public class LoginErrorFragment extends DialogFragment {
 
-    LoginDialogListener mListener;
+    private LoginDialogListener mListener;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -38,9 +37,11 @@ public class LoginErrorFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        String argTitle = getArguments().getString("title");
+        String argText = getArguments().getString("text");
 
-        builder.setTitle(R.string.loginError_title)
-                .setMessage(R.string.loginError_request)
+        builder.setTitle(argTitle)
+                .setMessage(argText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onDialogPositiveClick(LoginErrorFragment.this);

@@ -20,7 +20,7 @@
 
     <!-- ** LOGIN ERROR STRINGS ** -->
     <string name="loginError_title">Error de login</string>
-    <string name="loginError_request">Credensialis utentes non funzionanos </string>
+    <string name="loginError_wrongCredentials">Credensialis utentes non funzionanos </string>
 
 
 

@@ -13,7 +13,7 @@ import com.polimi.movecare_r01.ui.interfaces.PermissionDialogListener;
 
 public class PermissionFragment extends DialogFragment {
 
-    PermissionDialogListener mListener;
+    private PermissionDialogListener mListener;
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
@@ -38,6 +38,17 @@ public class PermissionFragment extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        /*DialogInterface d = new DialogInterface() {
+            @Override
+            public void cancel() {
+                mListener.ondi
+            }
+
+            @Override
+            public void dismiss() {
+
+            }
+        };*/
         builder.setTitle(R.string.permission_title)
                 .setMessage(R.string.permission_request)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

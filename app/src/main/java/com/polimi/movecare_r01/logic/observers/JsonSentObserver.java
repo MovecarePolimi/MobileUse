@@ -34,22 +34,11 @@ public class JsonSentObserver implements JsonSentObserverInterface {
             SharedPreferencesManager sharedPreferencesMng = new SharedPreferencesManager();
             sharedPreferencesMng.setReportSent(context, true);
 
-            // Non invierò la notifica, ma cancellerò tutte le notifiche giornaliere presenti
+            // Not send notification if everything is fine, but clear daily notifications
             ReportSentNotification sentNotification = new ReportSentNotification(context);
             sentNotification.setOpenAppSettings();
             sentNotification.send();
 
-            /*NotificationAbstract notifier = new NotificationAbstract();
-            // notifier.cancelDailyNotification();
-            notifier.createOpenAppNotification(
-                    context,
-                    "Daily Report Stored",
-                    "UserID: "+simSerialNumber,
-                    "report_channel_01",
-                    "report_completed_channel",
-                    "Cannot send report - An error occurred"
-            );
-            notifier.sendNotification(1011);*/
 
             // togliere items con time dalla lista
         } else{

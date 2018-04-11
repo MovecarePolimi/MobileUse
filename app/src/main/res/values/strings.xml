@@ -16,7 +16,7 @@
     <string name="permission_request">This allows the app to properly work, access to position, pedometer,
         accelerometer, phone number, message and call registry, create and send user reports, send notifications and
         run in the background. </string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Quit</string>
 
     <!-- ** PERMISSION ERROR STRINGS ** -->
@@ -26,7 +26,7 @@
 
     <!-- ** LOGIN ERROR STRINGS ** -->
     <string name="loginError_title">Login Failed</string>
-    <string name="loginError_wrongCredentials">User credentials not valid.</string>
+    <string name="loginError_wrongCredentials">Wrong user credentials. Please try again.</string>
     <string name="loginError_noInternet">Please check your internet connection and try again.</string>
     <string name="loginError_newLoginRequired">Sorry, an error occurs. Please try again.</string>
     <string name="loginError_fatalError">Sorry, a fatal error occurs. Please contact MoveCare.</string>

@@ -52,7 +52,7 @@ public class LoginPreferences {
         editor.putString(name, value);
         editor.apply();
 
-        Log.i(TAG, "Set variable " + var);
+        Log.v(TAG, "Set variable ");
     }
 
 
@@ -63,7 +63,6 @@ public class LoginPreferences {
 
         String x = settings.getString(name, null);
 
-        Log.e(TAG,"Return token value: "+ x);
         return x;
     }
 

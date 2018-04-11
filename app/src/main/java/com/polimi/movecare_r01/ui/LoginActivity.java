@@ -43,8 +43,8 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
     private Button loginButton;
     private ProgressDialog progressDialog;
 
-    // Variables for testing
     private static final String grant_type = "password";
+    // probably these two should be changed by EURECAT
     private static final String application = "4bac09a5b8dd11e781af0242ac120002";
     private static final String tenant = "5a258444b8dd11e781af0242ac120002";
 
@@ -70,10 +70,9 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
         String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
-        /*if (!validate(username, password)) {
-            showInvalidInputDialog();
+        if (!validate(username, password)) {
             return;
-        }*/
+        }
 
         forceCloseKeyboard();
 
@@ -89,25 +88,24 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
         loginIntent.putExtra(GRANT_TYPE_EXTRA, grant_type);
 
         startService(loginIntent);
-
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             HttpLoginManager.MessageType m = (HttpLoginManager.MessageType)intent.getSerializableExtra("message");
-            Log.e("receiver", "Got message: " + m);
+            Log.i("receiver", "Got message: " + m);
 
             switch (m){
                 case MGS_NO_INTERNET: {
-                    Log.e(TAG,"Login ERROR: no internet");
+                    Log.i(TAG,"Login ERROR: no internet");
                     showLoginErrorDialog(
                             context.getString(R.string.loginError_title),
                             context.getString(R.string.loginError_noInternet));
                     break;
                 }
                 case MSG_BAD_CREDENTIALS: {
-                    Log.e(TAG,"Login ERROR: credential error");
+                    Log.i(TAG,"Login ERROR: credential error");
                     showLoginErrorDialog(
                             context.getString(R.string.loginError_title),
                             context.getString(R.string.loginError_wrongCredentials)
@@ -115,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
                     break;
                 }
                 case MSG_INVALID_TOKEN: {
-                    Log.e(TAG,"Login ERROR: invalid token");
+                    Log.i(TAG,"Login ERROR: invalid token");
 
                     LoginPreferences logsPreferences = new LoginPreferences();
 
@@ -133,14 +131,14 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
                 }
                 case MSG_INVALID_REFRESH_TOKEN:{
                     // Login again
-                    Log.e(TAG,"Login ERROR: invalid refresh token");
+                    Log.i(TAG,"Login ERROR: invalid refresh token");
                     showLoginErrorDialog(
                             context.getString(R.string.loginError_title),
                             context.getString(R.string.loginError_newLoginRequired)
                     );
                 }
                 case MSG_ERR: {
-                    Log.e(TAG,"Login ERROR: server error");
+                    Log.i(TAG,"Login ERROR: server error");
                     showLoginErrorDialog(
                             context.getString(R.string.loginError_title),
                             context.getString(R.string.loginError_fatalError)
@@ -148,14 +146,14 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
                     break;
                 }
                 case MSG_OK: {
-                    Log.e(TAG,"Login OK");
+                    Log.i(TAG,"Login OK");
 
                     startActivity(new Intent(context, MainActivity.class));
                     finish();
                     break;
                 }
                 default: {
-                    Log.e(TAG, "Unexpeced behaviour: received unknown value "+m);
+                    Log.i(TAG, "Unexpeced behaviour: received unknown value "+m);
                     showLoginErrorDialog(
                             context.getString(R.string.loginError_title),
                             context.getString(R.string.loginError_fatalError)
@@ -192,15 +190,15 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
     private boolean validate(String username, String password) {
         boolean valid = true;
 
-        if (username.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            usernameText.setError("enter a valid email address");
+        if (username.isEmpty()) {
+            usernameText.setError("enter a valid username");
             valid = false;
         } else {
             usernameText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 4) {
+            passwordText.setError("at least 4 alphanumeric characters");
             valid = false;
         } else {
             passwordText.setError(null);
@@ -235,7 +233,6 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        Log.e(TAG, "Dialog Positive Click");
         loginButton.setEnabled(true);
     }
 }

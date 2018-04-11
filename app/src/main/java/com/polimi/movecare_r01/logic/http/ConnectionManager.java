@@ -2,8 +2,6 @@ package com.polimi.movecare_r01.logic.http;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.polimi.movecare_r01.logic.exceptions.InternetConnectionException;
@@ -15,30 +13,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class ConnectionManager extends HttpAbstract{
 
     private static final String TAG = ConnectionManager.class.getSimpleName();
 
     private final static String HTTP                = "http://";
-    private final static String IP                  = "54.93.97.25:";
-    private final static String PORT                = "10011/";
-    private final static String MESS                = "message";
-    private final static String CALL                = "call";
-    private final static String SMARTPHONE_USE      = "smartphoneuse";
-    private final static String PEOPLE_USE          = "peopleuse";
-    private final static String POST_MSG_URL        = HTTP+IP+PORT+MESS;
-    private final static String POST_CALL_URL       = HTTP+IP+PORT+CALL;
-    private final static String POST_SMARTPHONE_URL = HTTP+IP+PORT+SMARTPHONE_USE;
-    private final static String POST_PEOPLE_URL     = HTTP+IP+PORT+PEOPLE_USE;
+    private final static String SERVER_IP           = "35.158.208.168";
+    private final static String PORT                = ":10011";
+    private final static String WS_NAME             = "/smartphone";
+    private final static String MESS                = "/message";
+    private final static String CALL                = "/call";
+    private final static String SMARTPHONE_USE      = "/smartphoneuse";
+    private final static String PEOPLE_USE          = "/peopleuse";
+    private final static String POST_MSG_URL        = HTTP+ SERVER_IP + PORT + WS_NAME + MESS;
+    private final static String POST_CALL_URL       = HTTP+ SERVER_IP + PORT + WS_NAME + CALL;
+    private final static String POST_SMARTPHONE_URL = HTTP+ SERVER_IP + PORT + WS_NAME + SMARTPHONE_USE;
+    private final static String POST_PEOPLE_URL     = HTTP+ SERVER_IP + PORT + WS_NAME + PEOPLE_USE;
 
     private final static String JSON_OK             = "{\"success\":true}";
 
@@ -89,7 +84,7 @@ public class ConnectionManager extends HttpAbstract{
         URL url = new URL(POST_MSG_URL);
 
         InputStream stream = null;
-        // Cambiare in Https
+        // Future work: switch to HTTPS (when Eurecat will change it)
         HttpURLConnection connection = null;
 
         try {
@@ -111,7 +106,7 @@ public class ConnectionManager extends HttpAbstract{
             os.writeBytes(msgJSON);
 
             int responseCode = connection.getResponseCode();
-            Log.e(TAG, "Sending SUM json..");
+            Log.i(TAG, "Sending SUM json..");
             if (responseCode != HttpsURLConnection.HTTP_OK) {
                 throw new IOException("HTTP error code: " + responseCode);
             }
@@ -142,7 +137,7 @@ public class ConnectionManager extends HttpAbstract{
         URL url = new URL(POST_CALL_URL);
 
         InputStream stream = null;
-        // Cambiare in Https
+        // Future work: switch to HTTPS (when Eurecat will change it)
         HttpURLConnection connection = null;
 
         try {
@@ -194,7 +189,7 @@ public class ConnectionManager extends HttpAbstract{
         URL url = new URL(POST_SMARTPHONE_URL);
 
         InputStream stream = null;
-        // Cambiare in Https
+        // Future work: switch to HTTPS (when Eurecat will change it)
         HttpURLConnection connection = null;
 
         try {
@@ -246,7 +241,7 @@ public class ConnectionManager extends HttpAbstract{
         URL url = new URL(POST_PEOPLE_URL);
 
         InputStream stream = null;
-        // Cambiare in Https
+        // Future work: switch to HTTPS (when Eurecat will change it)
         HttpURLConnection connection = null;
 
         try {
@@ -313,10 +308,10 @@ public class ConnectionManager extends HttpAbstract{
         String responseValue = buffer.toString();
 
         if(responseValue.equals(JSON_OK)){
-            Log.e("----", "Tutto ok");
+            Log.e("----", "Everything is fine");
             return true;
         } else{
-            Log.e("----", "Non coincide");
+            Log.e("----", "Response not expected");
             return false;
         }
     }

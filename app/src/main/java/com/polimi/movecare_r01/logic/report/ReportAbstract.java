@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ReportAbstract {
+public abstract class ReportAbstract {
 
     protected static final String USER_ID             = "userid";
     protected static final String TIME                = "time";
@@ -51,21 +51,25 @@ public class ReportAbstract {
         return time;
     }
 
+    // Method currently not used (maybe in the future)
     protected JSONObject createTimestamp() throws JSONException {
 
         JSONObject time = new JSONObject();
 
         time.put(TEMPORALITY, Temporality.timestamp);
+        // Values to be changed
         time.put(T, 1494256770.105);
 
         return time;
     }
 
+    // Method currently not used (maybe in the future)
     protected JSONObject createTimeinterval() throws JSONException {
 
         JSONObject time = new JSONObject();
 
         time.put(TEMPORALITY, Temporality.timeinterval);
+        // Values to be changed
         time.put(T0, 1494256770.105);
         time.put(T1, 1234355660.205);
 

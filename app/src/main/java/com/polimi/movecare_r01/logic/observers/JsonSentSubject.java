@@ -20,11 +20,6 @@ public class JsonSentSubject implements JsonSentSubjectInterface {
 
     }
 
-    /*public void setSendAgainState(boolean state, String timeMillis) {
-        this.state = state;
-        notifyAgainAllObservers(timeMillis);
-    }*/
-
     @Override
     public void attach(JsonSentObserver jsonSentObserver) {
         observer = jsonSentObserver;

@@ -27,7 +27,7 @@ public class LoginService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e("LoginService","Start");
+        Log.v("LoginService","Start");
 
         this.context = getApplicationContext();
 
@@ -39,7 +39,7 @@ public class LoginService extends IntentService {
         final String TENANT = intent.getStringExtra(TENANT_EXTRA);
 
         if(doRefreshToken){
-            Log.e(TAG, "Do Refresh Token");
+            Log.v(TAG, "Do Refresh Token");
             final String REFRESH_TOKEN = intent.getStringExtra(REFRESH_TOKEN_EXTRA);
             final String[] params = {
                     GRANT_TYPE,
@@ -52,7 +52,7 @@ public class LoginService extends IntentService {
             final String USERNAME = intent.getStringExtra(USERNAME_EXTRA);
             final String PASSWORD = intent.getStringExtra(PASSWORD_EXTRA);
 
-            Log.e("LoginService", USERNAME +" - "+PASSWORD);
+            Log.v("LoginService", USERNAME +" - "+PASSWORD);
 
             final String[] params = {
                     GRANT_TYPE,

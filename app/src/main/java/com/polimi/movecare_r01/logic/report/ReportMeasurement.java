@@ -16,7 +16,7 @@ public class ReportMeasurement extends ReportAbstract {
     private static final String TAG = ReportMeasurement.class.getSimpleName();
 
     private static final String SENSOR_ID = "sensorid";
-    private static final String SENSOR_ID_SMARTPHONE  = "PO98LI98";
+    private static final String SENSOR_ID_SMARTPHONE  = "SENSOR_ID_TO_BE_CHANGED";
 
     private String sensorID;
 

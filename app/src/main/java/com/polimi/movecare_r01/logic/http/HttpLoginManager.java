@@ -26,6 +26,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class HttpLoginManager extends HttpAbstract{
     private static final String TAG = "HttpLoginManager";
 
+    private final static int TIMEOUT_VALUE = 1000;
     private Context context;
 
     private final static String USERNAME_STRING = "username";
@@ -76,8 +77,9 @@ public class HttpLoginManager extends HttpAbstract{
 
 
     public void doLogin(String[] paramsList){
+        Log.v(TAG,"Method DoLogin: start");
         if(!isConnected(context)){
-            Log.e(TAG, "Internet not available");
+            Log.i(TAG, "Internet not available");
             sendMessage(MessageType.MGS_NO_INTERNET);
             return;
         }
@@ -93,7 +95,7 @@ public class HttpLoginManager extends HttpAbstract{
 
     public void doRefreshToken(String[] paramsList){
         if(!isConnected(context)){
-            Log.e(TAG, "Internet not available");
+            Log.i(TAG, "Internet not available");
             sendMessage(MessageType.MGS_NO_INTERNET);
             return;
         }
@@ -101,23 +103,25 @@ public class HttpLoginManager extends HttpAbstract{
         try {
             refreshToken(paramsList);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.toString());
+            sendMessage(MessageType.MSG_ERR);
         }
     }
 
 
     private void retrieveToken(String[] paramsList) throws IOException {
 
+        Log.e(TAG, "Method RetrieveToken");
         URL url = new URL(LOGIN_POST_URL);
         InputStream stream = null;
 
         // Future work: switch to HTTPS (when Eurecat will change it)
         HttpURLConnection connection = null;
-
+        Log.e(TAG, "PARTE A");
         try {
             connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(3000);
-            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(TIMEOUT_VALUE);
+            connection.setConnectTimeout(TIMEOUT_VALUE);
             connection.setRequestMethod("POST");
 
             connection.setDoInput(true);
@@ -125,14 +129,15 @@ public class HttpLoginManager extends HttpAbstract{
 
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
+            Log.e(TAG, "PARTE B");
             // Open communications link (network traffic occurs here).
             connection.connect();
-
+            Log.e(TAG, "PARTE C");
             DataOutputStream os = new DataOutputStream(connection.getOutputStream());
             os.writeBytes(getParams(loginParamsName, paramsList));
-
+            Log.e(TAG, "PARTE D");
             int responseCode = connection.getResponseCode();
-            Log.e(TAG, "Sending Login Request..");
+            Log.i(TAG, "Sending Login Request..");
 
             // BAD CREDENTIALS
             if(responseCode == HttpsURLConnection.HTTP_INTERNAL_ERROR){
@@ -163,18 +168,17 @@ public class HttpLoginManager extends HttpAbstract{
                     strRefreshToken = json.getString(REFRESH_TOKEN_STRING);
                     strExpiresIn = json.getString(EXPIRES_IN_STRING);
                     strJti = json.getString(JTI_STRING);
-                    Log.e(TAG, "JSON read");
+                    Log.i(TAG, "JSON read");
 
                     // Store token data within shared preferences
                     LoginPreferences logPref = new LoginPreferences();
-                    // logPref.storeVariable(context, LoginPreferences.Variable.TEST_TOKEN, strAccessToken);
 
                     logPref.storeVariable(context, LoginPreferences.Variable.ACCESS_TOKEN, strAccessToken);
                     logPref.storeVariable(context, LoginPreferences.Variable.TOKEN_TYPE, strTokenType);
                     logPref.storeVariable(context, LoginPreferences.Variable.REFRESH_TOKEN, strRefreshToken);
                     logPref.storeVariable(context, LoginPreferences.Variable.EXPIRES_IN, strExpiresIn);
                     logPref.storeVariable(context, LoginPreferences.Variable.JTI, strJti);
-                    Log.e(TAG, "Token stored in Shared Preferences");
+                    Log.e(TAG, "Token variables stored in Shared Preferences");
 
                     retrieveUserID();
 
@@ -200,7 +204,6 @@ public class HttpLoginManager extends HttpAbstract{
         // Possible only if token is stored --> get token
         LoginPreferences logPrefs = new LoginPreferences();
         String accessToken = logPrefs.getVariable(context, LoginPreferences.Variable.ACCESS_TOKEN);
-        //String accessToken = logPrefs.getVariable(context, LoginPreferences.Variable.TEST_TOKEN);
         if(accessToken == null){
             Log.e(TAG, "Token not available");
             return;
@@ -394,7 +397,6 @@ public class HttpLoginManager extends HttpAbstract{
             }
         }
     }
-
     
     private void refreshToken(String[] paramsList) throws IOException {
         URL url = new URL(LOGIN_POST_URL);
@@ -405,8 +407,8 @@ public class HttpLoginManager extends HttpAbstract{
 
         try {
             connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(3000);
-            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(1000);
+            connection.setConnectTimeout(1000);
             connection.setRequestMethod("POST");
 
             connection.setDoInput(true);
@@ -448,7 +450,6 @@ public class HttpLoginManager extends HttpAbstract{
 
                     // Store token data within shared preferences
                     LoginPreferences logPref = new LoginPreferences();
-                    // logPref.storeVariable(context, LoginPreferences.Variable.TEST_TOKEN, strAccessToken);
 
                     logPref.storeVariable(context, LoginPreferences.Variable.ACCESS_TOKEN, strAccessToken);
                     logPref.storeVariable(context, LoginPreferences.Variable.TOKEN_TYPE, strTokenType);

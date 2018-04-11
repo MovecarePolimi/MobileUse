@@ -19,22 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.context = getApplicationContext();
 
-        /* If we need to implement Splash Screen with a sleeping thread: not suggested
-
-        setContentView(R.layout.activity_splash);
-        this.context = getApplicationContext();
-        Thread welcomeThread = new Thread() {
-            @Override
-            public void run() {
-                initialize();
-            }
-        };
-        welcomeThread.start();
-
-        */
-
         initialize();
-
     }
 
     private void initialize(){
@@ -49,14 +34,14 @@ public class SplashActivity extends AppCompatActivity {
             // If stored tokens or user data are not valid (null or empty), then do login again
             if(!isValidString(access_token) || !isValidString(refresh_token) ||
                     !isValidString(username) || !isValidString(uuid) || !isValidString(email)){
-                Log.e(TAG, "Login is required");
+                Log.i(TAG, "Login is required");
 
                 startActivity(new Intent(context, LoginActivity.class));
                 finish();
                 return;
             }
 
-            // stored data are reliable
+            // all data are stored yet
             startActivity(new Intent(context, MainActivity.class));
             finish();
 

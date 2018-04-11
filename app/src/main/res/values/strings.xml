@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoveCare</string>
+    <string name="app_name">MobileUse</string>
 
     <!-- ** LOGIN ACTIVITY ** -->
     <string name="username">Username</string>

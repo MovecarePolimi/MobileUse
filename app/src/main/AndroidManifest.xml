@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.polimi.movecare_r01"
+    package="com.polimi.mobileuse"
     android:installLocation="internalOnly">
 
     <!-- NORMAL PERMISSIONS -->
@@ -18,8 +18,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />-->
 
     <!--android:configChanges="orientation"-->
     <application
@@ -30,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.SplashActivity"
+            android:name="com.polimi.mobileuse.ui.SplashActivity"
             android:theme="@style/SplashTheme"
 
             android:screenOrientation="portrait">
@@ -41,33 +41,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.polimi.mobileuse.ui.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.LoginActivity"
+            android:name="com.polimi.mobileuse.ui.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             />
 
-        <service android:name=".applicationLogic.service.LoginService" />
-        <service android:name=".applicationLogic.service.InitializationService" />
-        <service android:name=".dao.StoreUserDataService" />
-        <service android:name=".applicationLogic.service.ReadLogsService" />
-        <service android:name=".applicationLogic.service.CreateDailyReportService" />
-        <service android:name=".applicationLogic.service.CreateMissingReportService" />
-        <service android:name=".applicationLogic.service.SendReportService" />
-        <service android:name=".applicationLogic.service.SendMissingReportService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.LoginService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.InitializationService" />
+        <service android:name="com.polimi.mobileuse.dao.StoreUserDataService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.ReadLogsService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.CreateDailyReportService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.CreateMissingReportService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.SendReportService" />
+        <service android:name="com.polimi.mobileuse.applicationLogic.service.SendMissingReportService" />
 
         <!-- **** - ALARM SERVICES - **** -->
         <service
-            android:name=".applicationLogic.schedule.SendReportAgainJobService"
+            android:name="com.polimi.mobileuse.applicationLogic.schedule.SendReportAgainJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <!-- *** RECEIVER *** -->
         <receiver
-            android:name=".applicationLogic.receiver.BatteryLowReceiver"
+            android:name="com.polimi.mobileuse.applicationLogic.receiver.BatteryLowReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -76,7 +76,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".applicationLogic.receiver.BootCompletedReceiver"
+            android:name="com.polimi.mobileuse.applicationLogic.receiver.BootCompletedReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -87,15 +87,15 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".applicationLogic.receiver.PowerDisconnectedReceiver"
+            android:name="com.polimi.mobileuse.applicationLogic.receiver.PowerDisconnectedReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".applicationLogic.receiver.BatteryCheckerReceiver" />
-        <receiver android:name=".applicationLogic.receiver.ReportAlarmReceiver" />
+        <receiver android:name="com.polimi.mobileuse.applicationLogic.receiver.BatteryCheckerReceiver" />
+        <receiver android:name="com.polimi.mobileuse.applicationLogic.receiver.ReportAlarmReceiver" />
 
     </application>
 

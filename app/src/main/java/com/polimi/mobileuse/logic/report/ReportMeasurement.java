@@ -1,7 +1,9 @@
 package com.polimi.mobileuse.logic.report;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.polimi.mobileuse.dao.preferences.LoginPreferences;
 import com.polimi.mobileuse.model.phoneReport.Call;
 import com.polimi.mobileuse.model.phoneReport.Message;
 
@@ -16,12 +18,14 @@ public class ReportMeasurement extends ReportAbstract {
     private static final String TAG = ReportMeasurement.class.getSimpleName();
 
     private static final String SENSOR_ID = "sensorid";
-    private static final String SENSOR_ID_SMARTPHONE  = "SENSOR_ID_TO_BE_CHANGED";
+    private static final String SENSOR_ID_SMARTPHONE  = "SMP";
 
     private String sensorID;
 
-    public ReportMeasurement(String userID){
-        this.userID = userID;
+    public ReportMeasurement(Context context){
+        this.context = context;
+        LoginPreferences log = new LoginPreferences();
+        this.userID = log.getVariable(context, LoginPreferences.Variable.UUID);
         this.code = Code.mcode;
     }
 

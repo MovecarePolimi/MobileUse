@@ -27,6 +27,7 @@ import java.util.List;
 public class CreateMissingReportService extends IntentService {
     private static final String TAG = CreateMissingReportService.class.getSimpleName();
 
+    private Context context;
     public CreateMissingReportService() {
         super("CreateMissingReportService");
     }
@@ -38,7 +39,7 @@ public class CreateMissingReportService extends IntentService {
 
         simSerialNumber = readSimSerialNumber();
 
-        Context context = getApplicationContext();
+        this.context = getApplicationContext();
         Log.i(TAG, "Other Report Attempts");
         SharedPreferencesManager sharedPreferencesMgr = new SharedPreferencesManager();
         List<String> missingReportMillis = sharedPreferencesMgr.getMissingDateList(context);
@@ -103,8 +104,8 @@ public class CreateMissingReportService extends IntentService {
 
     private JsonReport createJsonReport(InfoReport ir){
 
-        ReportMeasurement reportMeasurement = new ReportMeasurement(simSerialNumber);
-        ReportIndicator reportIndicator = new ReportIndicator(simSerialNumber);
+        ReportMeasurement reportMeasurement = new ReportMeasurement(context);
+        ReportIndicator reportIndicator = new ReportIndicator(context);
 
         JsonReport jsonReport = null;
         try {

@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.polimi.mobileuse.dao.preferences.SharedPreferencesManager;
 import com.polimi.mobileuse.logic.exceptions.InternetConnectionException;
-import com.polimi.mobileuse.logic.http.ConnectionManager;
+import com.polimi.mobileuse.logic.http.HttpStoreData;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public class SendMissingReportService extends IntentService {
         Log.e("*** OLD SSU ***", jsonStringSSU);
         Log.e("*** OLD PSU ***", jsonStringPSU);
 
-        ConnectionManager cm = new ConnectionManager(this);
+        HttpStoreData cm = new HttpStoreData(this);
         //cm.provaOk(timeMillis);
 
 
@@ -41,7 +41,7 @@ public class SendMissingReportService extends IntentService {
             cm.sendJSON(jsonStringSUM, jsonStringSUC, jsonStringSSU, jsonStringPSU, timeMillis);
         } catch (InternetConnectionException e) {
             Log.e(TAG, "No internet connection available");
-        } catch(IOException e) {
+        } catch(Exception e) {
             Log.e(TAG, "Exception: server error" );
         }
 

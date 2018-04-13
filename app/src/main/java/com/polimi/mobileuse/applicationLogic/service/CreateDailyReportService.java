@@ -28,10 +28,9 @@ public class CreateDailyReportService extends IntentService {
 
     private static final String TAG = CreateDailyReportService.class.getSimpleName();
 
+    private Context context;
     private static final String FIRST_ATTEMPT = "firstAttempt";
     private static final String MILLIS_DATE = "millis_date";
-
-    private String simSerialNumber;
 
     public CreateDailyReportService() {
         super("CreateDailyReportService");
@@ -41,9 +40,7 @@ public class CreateDailyReportService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "Start service");
 
-        Context context = getApplicationContext();
-
-        simSerialNumber = readSimSerialNumber();
+        this.context = getApplicationContext();
 
         boolean firstAttempt = intent.getBooleanExtra(FIRST_ATTEMPT, false);
 
@@ -101,8 +98,8 @@ public class CreateDailyReportService extends IntentService {
 
     private JsonReport createJsonReport(InfoReport ir){
 
-        ReportMeasurement reportMeasurement = new ReportMeasurement(simSerialNumber);
-        ReportIndicator reportIndicator = new ReportIndicator(simSerialNumber);
+        ReportMeasurement reportMeasurement = new ReportMeasurement(context);
+        ReportIndicator reportIndicator = new ReportIndicator(context);
 
         JsonReport jsonReport = null;
         try {
@@ -140,11 +137,6 @@ public class CreateDailyReportService extends IntentService {
         else{
             Log.e(TAG, "Lista Message NULL");
         }
-    }
-
-    private String readSimSerialNumber(){
-        TelephonyManager tMgr =(TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-         return tMgr.getSimSerialNumber();
     }
 
 }

@@ -28,6 +28,9 @@ public class InitializationService extends IntentService {
         // **** 2 **** -  Set alarms: report and battery checking (11.00 - 16.00)
         setAlarms();
 
+        /*TESTING*/
+        startService(new Intent(this, ReadLogsService.class));
+
         Log.i(TAG, "End service");
     }
 

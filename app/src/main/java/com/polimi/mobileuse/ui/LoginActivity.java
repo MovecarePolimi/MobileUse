@@ -18,8 +18,8 @@ import android.widget.EditText;
 
 import com.polimi.mobileuse.R;
 import com.polimi.mobileuse.applicationLogic.service.LoginService;
-import com.polimi.mobileuse.dao.preferences.LoginPreferences;
-import com.polimi.mobileuse.logic.http.HttpLoginManager;
+import com.polimi.mobileuse.applicationLogic.service.RefreshTokenService;
+import com.polimi.mobileuse.logic.http.HttpLogin;
 import com.polimi.mobileuse.ui.fragment.LoginErrorFragment;
 import com.polimi.mobileuse.ui.interfaces.LoginDialogListener;
 
@@ -27,15 +27,10 @@ import com.polimi.mobileuse.ui.interfaces.LoginDialogListener;
 public class LoginActivity extends AppCompatActivity implements LoginDialogListener{
     private static final String TAG = "LoginActivity";
 
-    private static final String DO_REFRESH_TOKEN_EXTRA  = "do_refresh_token";
-    private static final String REFRESH_TOKEN_EXTRA     = "refresh_token";
-
-    private static final String GRANT_TYPE_EXTRA        = "grant_type";
     private static final String USERNAME_EXTRA          = "username";
     private static final String PASSWORD_EXTRA          = "password";
-    private static final String APPLICATION_EXTRA       = "application";
-    private static final String TENANT_EXTRA            = "tenant";
 
+    private final static String BROADCAST_EVENT_NAME    = "login_event";
     private Context context;
 
     private EditText usernameText;
@@ -43,10 +38,7 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
     private Button loginButton;
     private ProgressDialog progressDialog;
 
-    private static final String grant_type = "password";
-    // probably these two should be changed by EURECAT
-    private static final String application = "4bac09a5b8dd11e781af0242ac120002";
-    private static final String tenant = "5a258444b8dd11e781af0242ac120002";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,9 +75,6 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
 
         loginIntent.putExtra(USERNAME_EXTRA, username);
         loginIntent.putExtra(PASSWORD_EXTRA, password);  // non in chiaro possibilmente
-        loginIntent.putExtra(APPLICATION_EXTRA, application);
-        loginIntent.putExtra(TENANT_EXTRA, tenant);
-        loginIntent.putExtra(GRANT_TYPE_EXTRA, grant_type);
 
         startService(loginIntent);
     }
@@ -93,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            HttpLoginManager.MessageType m = (HttpLoginManager.MessageType)intent.getSerializableExtra("message");
+            HttpLogin.MessageType m = (HttpLogin.MessageType)intent.getSerializableExtra("message");
             Log.i("receiver", "Got message: " + m);
 
             switch (m){
@@ -115,18 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
                 case MSG_INVALID_TOKEN: {
                     Log.i(TAG,"Login ERROR: invalid token");
 
-                    LoginPreferences logsPreferences = new LoginPreferences();
-
-                    Intent refreshTokenIntent = new Intent(context, LoginService.class);
-                    refreshTokenIntent.putExtra(DO_REFRESH_TOKEN_EXTRA, true); // boolean
-
-                    refreshTokenIntent.putExtra(REFRESH_TOKEN_EXTRA,
-                            logsPreferences.getVariable(context, LoginPreferences.Variable.REFRESH_TOKEN));
-                    refreshTokenIntent.putExtra(APPLICATION_EXTRA, application);
-                    refreshTokenIntent.putExtra(TENANT_EXTRA, tenant);
-                    refreshTokenIntent.putExtra(GRANT_TYPE_EXTRA, grant_type);
-
-                    startService(refreshTokenIntent);
+                    startService(new Intent(context, RefreshTokenService.class));
                     break;
                 }
                 case MSG_INVALID_REFRESH_TOKEN:{
@@ -170,7 +148,7 @@ public class LoginActivity extends AppCompatActivity implements LoginDialogListe
     protected void onResume(){
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                new IntentFilter("custom-event-name"));
+                new IntentFilter(BROADCAST_EVENT_NAME));
     }
 
     @Override

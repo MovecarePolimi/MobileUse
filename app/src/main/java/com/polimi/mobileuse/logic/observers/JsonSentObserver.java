@@ -12,13 +12,11 @@ public class JsonSentObserver implements JsonSentObserverInterface {
     private static final int JSON_EXPECTED = 4;
 
     private Context context;
-    private String simSerialNumber;
     private JsonSentSubject subject;
     private int receivedACK;
 
-    public JsonSentObserver(Context context, String simSerialNumber, JsonSentSubject subject){
+    public JsonSentObserver(Context context, JsonSentSubject subject){
         this.context = context;
-        this.simSerialNumber = simSerialNumber;
         this.receivedACK = 0;
         this.subject = subject;
         this.subject.attach(this);

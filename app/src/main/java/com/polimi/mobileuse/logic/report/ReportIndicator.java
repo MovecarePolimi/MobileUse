@@ -1,8 +1,10 @@
 package com.polimi.mobileuse.logic.report;
 
 
+import android.content.Context;
 import android.util.Log;
 
+import com.polimi.mobileuse.dao.preferences.LoginPreferences;
 import com.polimi.mobileuse.model.phoneReport.PeopleUseCall;
 import com.polimi.mobileuse.model.phoneReport.PeopleUseMessage;
 import com.polimi.mobileuse.model.phoneReport.SmartphoneUse;
@@ -43,7 +45,10 @@ public class ReportIndicator extends ReportAbstract {
     private static final String INT                 = "integer";
     private static final String SEC                 = "seconds";
 
-    public ReportIndicator(String userID){
+    public ReportIndicator(Context context){
+        LoginPreferences log = new LoginPreferences();
+        this.context = context;
+        this.userID = log.getVariable(context, LoginPreferences.Variable.UUID);
         this.userID = userID;
         this.code = Code.icode;
     }

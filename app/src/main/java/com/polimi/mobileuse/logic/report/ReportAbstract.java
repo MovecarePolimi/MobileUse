@@ -1,5 +1,7 @@
 package com.polimi.mobileuse.logic.report;
 
+import android.content.Context;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +28,7 @@ public abstract class ReportAbstract {
     protected static final String TYPE                = "type";
     protected static final String DURATION            = "duration";
 
+    protected Context context;
 
     String userID;
     enum Temporality{

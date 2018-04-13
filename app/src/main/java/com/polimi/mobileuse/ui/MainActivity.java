@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements PermissionDialogL
     protected void onResume() {
         super.onResume();
 
-        startInitService();
-
     }
 
     @Override

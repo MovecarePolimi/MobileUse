@@ -40,7 +40,7 @@ public abstract class NotificationAbstract {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         this.builder =
-                new NotificationCompat.Builder(context)
+                new NotificationCompat.Builder(context,channelID)
                         .setSmallIcon(R.drawable.mc_launcher)
                         .setContentTitle(title)
                         .setContentText(description)
